@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXTATION - Chato: Beyond Just 'Boring' - A Lesson for Brazilians</title>
+    <style>
+        /*
+         * NEXTATION Global Styles & Variables (adapted for static HTML)
+         * Using direct hex/rgba values from NEXTATION_WEBSITE__COLOUR_SYSTEM_AND_USAGE.pdf
+         */
+        :root {
+            /* Backgrounds */
+            --bg-main: #02030b; /* Deep space (body) */
+            --bg-gradient: radial-gradient(circle at top, #1c1f3b 0%, #050716 45%, #02030b 100%);
+            /* Card / Panel */
+            --card-bg: rgba(15, 18, 40, 0.92);
+            --card-soft-bg: rgba(18, 21, 50, 0.88);
+            /* Accent Neon */
+            --accent-cyan: #4ef2ff; /* Neon aqua */
+            --accent-pink: #ff2f92; /* Holographic magenta */
+            --accent-purple: #aa5dff; /* Soft lavender */
+            --accent-green: #4dff9b; /* Bright mint */
+            --accent-yellow: #ffe25f; /* Accent blended in text gradients */
+            /* Muted text */
+            --muted: rgba(255,255,255,0.65);
+            /* Borders & Glows */
+            --border-glow: rgba(120,120,255,0.45);
+            --shadow-strong: 0 0 36px rgba(130,80,255,0.6);
+            --shadow-soft: 0 0 20px rgba(0,0,0,0.65);
+            /* Radii & Transitions (visual only for static) */
+            --radius-lg: 22px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --transition-fast: 0.18s ease-out;
+            --transition-med: 0.28s ease-out;
+
+            /* Component-Specific Colours (adapted for static) */
+            --neon-top-bar-gradient: linear-gradient(90deg, #00f5ff, #ff2f92, #ffe25f, #4dff9b);
+            --brand-title-gradient: linear-gradient(90deg, #4ef2ff, #ff2f92);
+            --main-panel-gradient: linear-gradient(135deg, rgba(13,16,40,0.98), rgba(6,8,26,0.98));
+            --panel-radial-accent: radial-gradient(circle at top left, rgba(87,57,255,0.35), transparent 58%);
+            --panel-title-color: #4ef2ff;
+            --panel-subtitle-color: rgba(255,255,255,0.45);
+            --locked-expression-text-gradient: linear-gradient(120deg, #ffe25f, #ff2f92, #4ef2ff);
+            --pronunciation-bg: linear-gradient(90deg, rgba(0,0,0,0.75), rgba(28,32,80,0.95));
+            --pronunciation-border: rgba(78,242,255,0.6);
+            --situation-card-bg: radial-gradient(circle at top, rgba(255,255,255,0.06), rgba(3,5,24,0.96));
+            --situation-card-border: rgba(178,75,243,0.45);
+            --writing-textarea-bg: rgba(2,6,32,0.95);
+            --writing-textarea-border: rgba(178,75,243,0.45);
+            --note-bg: #44475a; /* Using a similar dark tone for notes */
+            --note-border: #ffb86c; /* Orange border for notes */
+
+            /* Exercise specific colors */
+            --exercise-bg: rgba(25, 28, 60, 0.9);
+            --option-bg: rgba(35, 38, 70, 0.9);
+            --option-hover-bg: rgba(50, 55, 100, 0.9);
+            --correct-answer-bg: rgba(77, 255, 155, 0.2); /* Light green tint */
+            --wrong-answer-bg: rgba(255, 47, 146, 0.2); /* Light pink tint */
+            --button-bg: linear-gradient(90deg, #4ef2ff, #aa5dff);
+            --button-hover-bg: linear-gradient(90deg, #aa5dff, #4ef2ff);
+            --button-text: #02030b;
+        }
+
+        /* General Body and Container Styling */
+        body {
+            font-family: 'Montserrat', sans-serif; /* As per NEXTATION typography */
+            background: var(--bg-gradient); /* Deep space background gradient */
+            color: #e0e0e0; /* Light text for contrast */
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column; /* Stack header and main content */
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            position: relative; /* For pseudo-elements */
+        }
+
+        /* Global background glowing overlays (as per NEXTATION design) */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.25;
+            filter: blur(80px);
+            z-index: -1;
+        }
+        body::before {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle at center, rgba(130, 40, 255, 0.25), transparent 70%);
+            top: 10%;
+            left: 5%;
+        }
+        body::after {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle at center, rgba(0, 220, 255, 0.18), transparent 70%);
+            bottom: 15%;
+            right: 10%;
+        }
+
+        /* Header Styling */
+        .header-strip {
+            width: 100%;
+            background: var(--neon-top-bar-gradient); /* Multi-colour pulse line */
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.6); /* Subtle glow */
+            margin-bottom: 30px;
+            position: sticky; /* Makes it stick to the top */
+            top: 0;
+            z-index: 100;
+        }
+        .brand-title {
+            font-family: 'Space Grotesk', sans-serif; /* As per NEXTATION typography */
+            font-size: 1.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            background: var(--brand-title-gradient); /* Neon cyan-magenta gradient text fill */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* Fallback for non-webkit browsers */
+            margin: 0;
+        }
+
+        /* Main Content Container (Lesson Panel Surface) */
+        .main-content-wrapper {
+            width: 90%;
+            max-width: 900px; /* Limit content width for readability */
+            background: var(--main-panel-gradient); /* Main lesson card background */
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-strong); /* Strong shadow for depth */
+            position: relative;
+            overflow: hidden; /* For radial accent */
+            border: 1px solid var(--border-glow); /* Subtle border glow */
+            margin-bottom: 40px;
+        }
+        .main-content-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--panel-radial-accent); /* Subtle purple nebula effect */
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Text and Headings within the content wrapper */
+        h1, h2, h3, h4, p, ul, li {
+            position: relative; /* Ensure content is above pseudo-elements */
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2em;
+            text-align: center;
+            color: var(--panel-title-color); /* Neon aqua for main title */
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(78,242,255,0.3); /* Lighter accent border */
+            text-shadow: 0 0 10px rgba(78,242,255,0.4); /* Subtle glow for title */
+        }
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6em;
+            color: var(--accent-pink); /* Holographic magenta for sub-headings */
+            margin-top: 35px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2em;
+            color: var(--accent-purple); /* Soft lavender for smaller headings */
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 15px;
+            color: #ffffff; /* Main text color */
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .key-term {
+            color: var(--accent-yellow); /* Yellow for key terms */
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255,226,95,0.5);
+        }
+        .portuguese-explanation {
+            font-style: italic;
+            color: var(--muted);
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            display: block; /* Ensure it takes its own line */
+        }
+
+        /* Example Blocks (Situation Cards) */
+        .example {
+            background: var(--situation-card-bg); /* Each scenario tile background */
+            border-left: 4px solid var(--accent-green); /* Bright mint border for examples */
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 0 18px rgba(0,0,0,0.85); /* Depth shadow */
+            border: 1px solid var(--situation-card-border); /* Purple outline */
+            transition: border-color var(--transition-fast);
+        }
+        .example:hover {
+            border-color: rgba(255,160,255,0.9); /* Bright pink on hover */
+        }
+        .example p {
+            margin: 0;
+            font-style: italic;
+            color: rgba(255,255,255,0.92); /* Example text color */
+        }
+        .example p strong {
+            color: var(--accent-cyan);
+        }
+        .example p:last-child {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.76); /* Context text color */
+            margin-top: 5px;
+        }
+
+        /* Note Block */
+        .note {
+            background-color: var(--note-bg);
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            margin-top: 30px;
+            font-size: 0.95em;
+            border-left: 4px solid var(--note-border); /* Orange border for notes */
+            color: var(--muted);
+        }
+        .note strong {
+            color: #ffffff;
+        }
+
+        /* Exercise Section Styling */
+        .exercise-section {
+            background: var(--exercise-bg);
+            border-radius: var(--radius-md);
+            padding: 30px;
+            margin-top: 50px;
+            border: 1px solid var(--accent-purple);
+            box-shadow: var(--shadow-soft);
+        }
+        .exercise-section h2 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(78,242,255,0.2);
+            padding-bottom: 10px;
+        }
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: var(--option-bg);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(170,93,255,0.3);
+        }
+        .question p {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+        .options label {
+            display: block;
+            background-color: var(--option-bg);
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color var(--transition-fast), border-color var(--transition-fast);
+            border: 1px solid transparent;
+        }
+        .options label:hover {
+            background-color: var(--option-hover-bg);
+            border-color: var(--accent-cyan);
+        }
+        .options input[type="radio"] {
+            margin-right: 10px;
+            accent-color: var(--accent-green); /* Style radio button */
+        }
+        .check-button {
+            display: block;
+            width: fit-content;
+            margin: 20px auto 10px auto;
+            padding: 12px 30px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background var(--transition-med), box-shadow var(--transition-med);
+            box-shadow: 0 0 15px rgba(78,242,255,0.4);
+        }
+        .check-button:hover {
+            background: var(--button-hover-bg);
+            box-shadow: 0 0 20px rgba(170,93,255,0.6);
+        }
+        .feedback {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+            min-height: 25px; /* Prevent layout shift */
+        }
+        .feedback.correct {
+            color: var(--accent-green);
+            text-shadow: 0 0 8px rgba(77,255,155,0.6);
+        }
+        .feedback.wrong {
+            color: var(--accent-pink);
+            text-shadow: 0 0 8px rgba(255,47,146,0.6);
+        }
+        .question.correct-highlight {
+            background-color: var(--correct-answer-bg);
+            border-color: var(--accent-green);
+        }
+        .question.wrong-highlight {
+            background-color: var(--wrong-answer-bg);
+            border-color: var(--accent-pink);
+        }
+
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.8em;
+            color: var(--muted); /* Muted text color */
+            width: 100%;
+            background-color: rgba(5,7,22,0.7); /* Darker blend of base line */
+            border-top: 1px solid rgba(120,120,255,0.1);
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+    <!-- Optional: Link to Google Fonts if you want Space Grotesk and Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Space+Grotesk:wght=700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header-strip">
+        <h1 class="brand-title">Lego Disruptive Chain Method by Daby</h1>
+    </div>
+
+    <div class="main-content-wrapper">
+        <h1>Chato: Beyond Just 'Boring'</h1>
+        <p>
+            Hey there, Brazilian friends! The word <span class="key-term">"chato"</span> in Portuguese is super useful because it can mean so many things.
+            But in English, we often use different words to be more specific. This lesson will help you understand which English word to use
+            when you want to say something is "chato." Let's break it down!
+        </p>
+
+        <h2>1. Chato as "Boring"</h2>
+        <span class="portuguese-explanation">("Chato" como algo que não tem interesse, que é monótono.)</span>
+        <p>
+            Use <span class="key-term">"boring"</span> when something lacks interest, excitement, or makes you feel sleepy. It's about a lack of stimulation,
+            not necessarily irritation. Think of a long, uninteresting lecture or a slow movie.
+        </p>
+        <h3>When to Use "Boring":</h3>
+        <ul>
+            <li>When something is not interesting or exciting.</li>
+            <li>When something makes you feel tired or uninterested.</li>
+            <li>When an activity or person lacks energy or fun.</li>
+        </ul>
+        <div class="example">
+            <p><strong>Situation:</strong> A very long, uninteresting meeting at work.</p>
+            <p><strong>Example:</strong> "My boss's presentation was so <span class="key-term">boring</span>, I almost fell asleep!"</p>
+            <p><strong>Context:</strong> The meeting lacked engaging content and made you feel uninterested.</p>
+        </div>
+        <div class="example">
+            <p><strong>Situation:</strong> Watching a movie that has no exciting parts.</p>
+            <p><strong>Example:</strong> "This movie is really <span class="key-term">boring</span>; nothing exciting ever happens."</p>
+            <p><strong>Context:</strong> The film failed to capture your attention or provide entertainment.</p>
+        </div>
+        <div class="example">
+            <p><strong>Situation:</strong> Listening to someone talk about a topic you don't care about.</p>
+            <p><strong>Example:</strong> "He kept talking about his stamp collection, it was quite <span class="key-term">boring</span>."</p>
+            <p><strong>Context:</strong> The conversation topic was uninteresting to you.</p>
+        </div>
+
+        <h2>2. Chato as "Annoying" / "Irritating"</h2>
+        <span class="portuguese-explanation">("Chato" como algo ou alguém que incomoda, que irrita.)</span>
+        <p>
+            Use <span class="key-term">"annoying"</span> or <span class="key-term">"irritating"</span> when something or someone bothers you, makes you a little angry,
+            or causes discomfort. It's about something that gets on your nerves.
+        </p>
+        <h3>When to Use "Annoying" / "Irritating":</h3>
+        <ul>
+            <li>When someone does something that bothers you repeatedly.</li>
+            <li>When a sound or situation is unpleasant and makes you feel impatient.</li>
+            <li>When something is a nuisance or a bother.</li>
+        </ul>
+        <div class="example">
+            <p><strong>Situation:</strong> Your neighbor's dog barks all night.</p>
+            <p><strong>Example:</strong> "That dog's barking is so <span class="key-term">annoying</span>!"</p>
+            <p><strong>Context:</strong> The sound bothers you and prevents you from sleeping.</p>
+        </div>
+        <div class="example">
+            <p><strong>Situation:</strong> Someone keeps interrupting you while you're talking.</p>
+            <p><strong>Example:</strong> "It's really <span class="key-term">irritating</span> when people don't let you finish your sentence."</p>
+            <p><strong>Context:</strong> The interruption makes you feel impatient or slightly angry.</p>
+        </div>
+
+        <h2>3. Chato as "Tedious" / "Monotonous"</h2>
+        <span class="portuguese-explanation">("Chato" como uma tarefa longa, repetitiva e sem interesse.)</span>
+        <p>
+            Use <span class="key-term">"tedious"</span> or <span class="key-term">"monotonous"</span> for tasks that are long, repetitive, and require a lot of effort
+            but are not interesting. It's about the work itself being unengaging.
+        </p>
+        <h3>When to Use "Tedious" / "Monotonous":</h3>
+        <ul>
+            <li>For tasks that are very long and repetitive.</li>
+            <li>When work is dull and lacks variety.</li>
+            <li>When an activity feels like a chore.</li>
+        </ul>
+        <div class="example">
+            <p><strong>Situation:</strong> Filling out many forms with the same information.</p>
+            <p><strong>Example:</strong> "The paperwork was so <span class="key-term">tedious</span>; it took hours to complete."</p>
+            <p><strong>Context:</strong> The task was long, repetitive, and uninteresting.</p>
+        </div>
+        <div class="example">
+            <p><strong>Situation:</strong> Working on an assembly line doing the same thing all day.</p>
+            <p><strong>Example:</strong> "His job became very <span class="key-term">monotonous</span> after a few months."</p>
+            <p><strong>Context:</strong> The work lacked variety and became dull.</p>
+        </div>
+
+        <h2>4. Chato as "Dull"</h2>
+        <span class="portuguese-explanation">("Chato" como algo ou alguém sem vivacidade, sem graça.)</span>
+        <p>
+            <span class="key-term">"Dull"</span> is similar to "boring" but can also describe a person who is not very lively or interesting,
+            or an event that lacks excitement. It can also describe a color that is not bright.
+        </p>
+        <h3>When to Use "Dull":</h3>
+        <ul>
+            <li>To describe a person who is not exciting or witty.</li>
+            <li>To describe an event that was not lively.</li>
+            <li>To describe something that lacks brightness or sharpness (e.g., a dull knife, a dull color).</li>
+        </ul>
+        <div class="example">
+            <p><strong>Situation:</strong> A person who doesn't tell jokes or engage in interesting conversation.</p>
+            <p><strong>Example:</strong> "I find him a bit <span class="key-term">dull</span>; he never has anything interesting to say."</p>
+            <p><strong>Context:</strong> The person lacks interesting qualities.</p>
+        </div>
+
+        <h2>5. Chato as "A Pain" / "A Nuisance"</h2>
+        <span class="portuguese-explanation">("Chato" como algo que é um incômodo, um aborrecimento ou difícil de lidar.)</span>
+        <p>
+            Sometimes <span class="key-term">"chato"</span> can mean something is a burden, difficult, or a hassle.
+            In English, we often say <span class="key-term">"a pain"</span> (informal) or <span class="key-term">"a nuisance."</span>
+        </p>
+        <h3>When to Use "A Pain" / "A Nuisance":</h3>
+        <ul>
+            <li>When something causes trouble or is difficult to deal with.</li>
+            <li>When someone is bothersome or creates problems.</li>
+        </ul>
+        <div class="example">
+            <p><strong>Situation:</strong> Having to fix your computer again and again.</p>
+            <p><strong>Example:</strong> "My old computer is such <span class="key-term">a pain</span>; it's always breaking down."</p>
+            <p><strong>Context:</strong> The computer causes repeated trouble.</p>
+        </div>
+        <div class="example">
+            <p><strong>Situation:</strong> A small, bothersome problem.</p>
+            <p><strong>Example:</strong> "The constant buzzing sound was a real <span class="key-term">nuisance</span>."</p>
+            <p><strong>Context:</strong> The sound was bothersome and annoying.</p>
+        </div>
+
+        <div class="note">
+            <strong>Important Note:</strong> Remember that "chato" can also mean "flat" (like a "pneu chato" - flat tire) or refer to a specific type of body louse (pubic lice, sometimes called "crabs" in English). These are very different meanings and context is key!
+        </div>
+
+        <p>
+            So, next time you want to use "chato," think about *why* it's "chato" and pick the best English word!
+            Is it not interesting? Is it bothering you? Is it long and repetitive? Or is it just a hassle?
+        </p>
+
+        <!-- Participative Translation Exercise Section -->
+        <div class="exercise-section">
+            <h2>Participative Translation Exercise</h2>
+            <p>Choose the best English word for "chato" in each sentence.</p>
+
+            <div class="question" id="q1">
+                <p>1. Aquele filme foi muito chato.</p>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="a"> Annoying</label>
+                    <label><input type="radio" name="q1" value="b"> Boring</label>
+                    <label><input type="radio" name="q1" value="c"> Tedious</label>
+                </div>
+                <button class="check-button" onclick="checkAnswer('q1', 'b')">Check Answer</button>
+                <div class="feedback" id="feedback-q1"></div>
+            </div>
+
+            <div class="question" id="q2">
+                <p>2. É muito chato quando o vizinho faz barulho à noite.</p>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="a"> Dull</label>
+                    <label><input type="radio" name="q2" value="b"> A pain</label>
+                    <label><input type="radio" name="q2" value="c"> Annoying</label>
+                </div>
+                <button class="check-button" onclick="checkAnswer('q2', 'c')">Check Answer</button>
+                <div class="feedback" id="feedback-q2"></div>
+            </div>
+
+            <div class="question" id="q3">
+                <p>3. Preencher esses formulários é um trabalho chato.</p>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="a"> Tedious</label>
+                    <label><input type="radio" name="q3" value="b"> Dull</label>
+                    <label><input type="radio" name="q3" value="c"> Boring</label>
+                </div>
+                <button class="check-button" onclick="checkAnswer('q3', 'a')">Check Answer</button>
+                <div class="feedback" id="feedback-q3"></div>
+            </div>
+
+            <div class="question" id="q4">
+                <p>4. Meu carro velho é muito chato, sempre quebra.</p>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="a"> Irritating</label>
+                    <label><input type="radio" name="q4" value="b"> A nuisance</label>
+                    <label><input type="radio" name="q4" value="c"> Dull</label>
+                </div>
+                <button class="check-button" onclick="checkAnswer('q4', 'b')">Check Answer</button>
+                <div class="feedback" id="feedback-q4"></div>
+            </div>
+
+        </div> <!-- End of Exercise Section -->
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 NEXTATION - English Learning for ADHD. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function checkAnswer(questionId, correctAnswer) {
+            const questionElement = document.getElementById(questionId);
+            const feedbackElement = document.getElementById(`feedback-${questionId}`);
+            const selectedOption = questionElement.querySelector(`input[name="${questionId}"]:checked`);
+
+            // Clear previous highlights and feedback
+            questionElement.classList.remove('correct-highlight', 'wrong-highlight');
+            feedbackElement.textContent = '';
+            feedbackElement.classList.remove('correct', 'wrong');
+
+            if (selectedOption) {
+                if (selectedOption.value === correctAnswer) {
+                    feedbackElement.textContent = "Correct! 🎉";
+                    feedbackElement.classList.add('correct');
+                    questionElement.classList.add('correct-highlight');
+                } else {
+                    feedbackElement.textContent = "Not quite. Try again! 🤔";
+                    feedbackElement.classList.add('wrong');
+                    questionElement.classList.add('wrong-highlight');
+                }
+            } else {
+                feedbackElement.textContent = "Please select an option.";
+                feedbackElement.classList.add('wrong');
+            }
+        }
+    </script>
+</body>
+</html>
